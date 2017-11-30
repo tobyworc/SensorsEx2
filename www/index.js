@@ -6,14 +6,7 @@ accelerometerOptions.frequency = 3000; //changed my mind - now 3 seconds
 //when the page is created...
 $(document).on("pagecreate", "#page1", function () {
 	
-	//setup listener for the toggle switch
-	$("#flipswitch").on("change", function() {
 		
-		if( $(this).val() == "on" ) startSensor();
-		else if ( $(this).val() == "off" ) stopSensor();
-
-	});
-	
 	//setup listener for the slider
 	$("#slider").on("slidestop", function() {
 		
@@ -24,13 +17,21 @@ $(document).on("pagecreate", "#page1", function () {
 		updateFreq(freq);
 	
 	});
+    
+    //setup listener for the toggle switch
+	$("#flipswitch").on("change", function() {
+		
+		if( $(this).val() == "on" ) updateFreq(freq);
+		else if ( $(this).val() == "off" ) stopSensor();
+
+	});
 	
 });
 
 
 function startSensor() {
 	watchID = navigator.accelerometer.watchAcceleration( accelerometerSuccess, accelerometerError, accelerometerOptions);
-}
+};
 
 
 function stopSensor() {
@@ -40,7 +41,7 @@ function stopSensor() {
 	$('#sensorY').val("");
 	$('#sensorZ').val("");
 	$('#timestamp').val("");
-}
+};
 
 function accelerometerSuccess(acceleration) {
 	
@@ -49,15 +50,19 @@ function accelerometerSuccess(acceleration) {
 	$('#sensorZ').val(acceleration.z);
 	$('#timestamp').val(acceleration.timestamp);
 
-}
+};
 
 function accelerometerError() {
    alert('Error');
-}
+};
 
 function updateFreq(freq) {
 	//do something to update freq. here.
-}
+    
+    setInterval(startSensor,freq);
+
+      
+};
 
 
 
